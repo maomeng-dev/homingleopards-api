@@ -13,15 +13,6 @@ class Download
 {
     public function showlist()
     {
-        $referer = $_SERVER['HTTP_REFERER'];
-        $res = explode('.org', $referer);
-        if (empty($res)) {
-            exit;
-        }
-        $domain = $res[0] . ".org";
-        if (strpos($domain, 'homingleopards.org')) {
-            header("Access-Control-Allow-Origin:{$domain}");
-        }
         $data = array(
             "page" => [
                 "current" => 1,

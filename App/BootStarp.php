@@ -8,13 +8,25 @@
 
 namespace App;
 
-use Medoo\Medoo;
-
 class BootStarp
 {
     public static function start()
     {
+        //self::setHeader();
         self::initDb();
+    }
+
+    public static function setHeader()
+    {
+        $referer = $_SERVER['HTTP_REFERER'];
+        $res = explode('.org', $referer);
+        if (empty($res)) {
+            exit;
+        }
+        $domain = $res[0] . ".org";
+        if (strpos($domain, 'homingleopards.org')) {
+            header("Access-Control-Allow-Origin:{$domain}");
+        }
     }
 
     /**
@@ -27,10 +39,10 @@ class BootStarp
             "Medoo\Medoo",
             array(
                 ['database_type' => 'mysql',
-                'database_name' => \Yaconf::get("maomeng.db.dbname"),
-                'server' => \Yaconf::get("maomeng.db.host"),
-                'username' => \Yaconf::get("maomeng.db.user"),
-                'password' => \Yaconf::get("maomeng.db.pass")]
+                'database_name' => getConfig("db.dbname"),
+                'server' => getConfig("db.host"),
+                'username' => getConfig("db.user"),
+                'password' => getConfig("db.pass")]
             ),
             function() {
 

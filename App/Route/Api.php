@@ -26,5 +26,11 @@ final class Api
                 $controller->showlist();
             }
         });
+
+        \Flight::route('/api/backend/@con/@act', function ($con, $act) {
+            $className = "\App\Api\Backend\Controller\\" . ucfirst($con);
+            $controller = new $className;
+            $controller->$act();
+        });
     }
 }

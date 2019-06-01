@@ -45,6 +45,11 @@ function shareJssdk($api)
     return $app->jssdk->buildConfig($api);
 }
 
+function getConfig($name)
+{
+    return \Yaconf::get(INC_FILE . "." . $name);
+}
+
 function getWechatApp()
 {
     $config = [
@@ -53,8 +58,8 @@ function getWechatApp()
         /**
          * 账号基本信息，请从微信公众平台/开放平台获取
          */
-        'app_id' => \Yaconf::get('maomeng.wechat.appid'),  // AppID
-        'secret' => \Yaconf::get('maomeng.wechat.secret'),     // AppSecret
+        'app_id' => getConfig('.wechat.appid'),  // AppID
+        'secret' => getConfig('.wechat.secret'),// AppSecret
         /**
          * 日志配置
          *

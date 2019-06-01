@@ -64,6 +64,25 @@ class User extends BaseController
         $this->jsonSuccess($info['data']);
     }
 
+    public function save()
+    {
+        $this->checkUser();
+        $data['nickname'] = \Flight::request()->data->nickname;
+        $data['user_name'] = \Flight::request()->data->user_name;
+        $data['password'] = \Flight::request()->data->password;
+        $data['comment'] = \Flight::request()->data->comment;
+        $uid = \Flight::request()->data->id;
+        $user = new UserModel();
+        if(!empty($uid))
+        {
+            //更新原有用户
+        }
+        else
+        {
+            //新增用户
+        }
+    }
+
     public function checkUser($level = 2, $uid = 0)
     {
         $user_id = SessionHelper::get("user_id");

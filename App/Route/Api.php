@@ -29,7 +29,15 @@ final class Api
 
         \Flight::route('/api/backend/@con/@act', function ($con, $act) {
             $className = "\App\Api\Backend\Controller\\" . ucfirst($con);
+            if(!class_exists($className))
+            {
+                exit('入口' . $con . "不存在");
+            }
             $controller = new $className;
+            if(!method_exists($controller, $act))
+            {
+                exit('方法' . $act . "不存在");
+            }
             $controller->$act();
         });
     }

@@ -41,6 +41,40 @@ Flight::route(
     }
 );
 
+Flight::route(
+    '/test/list/',
+    function() {
+        $app = getWechatApp();
+        $material = $app->material;
+
+        $lists = $material->list('news', 0, 10);
+        var_dump($lists);
+
+    }
+);
+
+Flight::route(
+    '/test/db/',
+    function() {
+        $db = Flight::Db();
+        $result = $db->select('user_list', '*', []);
+        var_dump($result);
+    }
+);
+
+Flight::route(
+    '/test/content',
+    function() {
+        $id = Flight::request()->query->id;
+
+        $app = getWechatApp();
+        $material = $app->material;
+        $content = $material->get($id);
+        var_dump($content);
+
+    }
+);
+
 Flight::before(
     'start',
     function(&$params, &$output) {

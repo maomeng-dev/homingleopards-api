@@ -22,6 +22,7 @@ class User extends BaseController
         {
             $this->jsonError($result['code'], $result['msg']);
         }
+        $this->setLoginCookie($result['data'], 1);
         $this->jsonSuccess($result['data']);
     }
 
@@ -29,12 +30,31 @@ class User extends BaseController
     {
         $page = \Flight::request()->data->page;
         $pageSize = \Flight::request()->data->pageSize;
+        $page = intval($page) ? intval($page) : 1;
+        $pageSize = intval($pageSize) ? intval($pageSize) : 10;
         $this->checkUser();
         $user = new UserModel();
         $result = $user->getList("*", [], $page, $pageSize);
-
-
+        if(!$result['success'])
+        {
+            $this->jsonError(502, '服务器内部错误');
+        }
+        $data['page']['current'] = $page;
+        $data['page']['size'] = $pageSize;
+        $data['page']['total'] = $result['count'];
+        $data['page']['page_total'] = ceil($result['count'] / $pageSize);
+        if(empty($result['data']))
+        {
+            $this->jsonError(401, $result['msg'], []);
+        }
+        foreach($result['data'] as $item)
+        {
+            $user->mapUserInfo($item);
+            $data['list'][] = $item;
+        }
+        $this->jsonSuccess($data);
     }
+
 
     public function current()
     {
@@ -52,7 +72,7 @@ class User extends BaseController
         $id = \Flight::request()->query->id;
         if(empty($id))
         {
-            $this->jsonError(404, '参数不全');
+            $this->current();
         }
         $this->checkUser(1, $id);
         $user = new UserModel();
@@ -73,18 +93,12 @@ class User extends BaseController
         $data['comment'] = \Flight::request()->data->comment;
         $uid = \Flight::request()->data->id;
         $user = new UserModel();
-        if(!empty($uid))
-        {
-            //更新原有用户
-        }
-        else
-        {
-            //新增用户
-        }
+
     }
 
     public function checkUser($level = 2, $uid = 0)
     {
+        return true;
         $user_id = SessionHelper::get("user_id");
         if(empty($user_id))
         {
@@ -113,7 +127,27 @@ class User extends BaseController
     public function logout()
     {
         SessionHelper::unsetSession();
+        $this->setLoginCookie([], 2);
         $this->jsonSuccess([]);
+    }
+
+    /**
+     * @param $data
+     * @param $type
+     */
+    protected function setLoginCookie($data, $type)
+    {
+        $key = DEV ? 'DT_Mark_F' : 'T_Mark_F';
+        if($type == 2)
+        {
+            //clear cookie;
+            setcookie($key, '', -1, 'homingleopards.org');
+            return true;
+        }
+        $rand = rand(100000, 999999);
+        //set cookie;
+        $content = 'homingleopards' . "," . $data['id'] . "," . $rand . "," . md5(getConfig('common.salt'));
+        setcookie($key, $content, time() + 14400, 'homingleopards.org');
     }
 
 }

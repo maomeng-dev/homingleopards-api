@@ -100,6 +100,14 @@ Flight::route(
     }
 );
 
+Flight::route(
+    '/test/cookie',
+    function() {
+        setcookie('h_token', '1', time() + 86400, '/', 'cf.homingleopards.org');
+        echo 'ok';
+
+    }
+);
 
 Flight::route(
     '/test/content',

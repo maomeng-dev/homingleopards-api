@@ -12,16 +12,20 @@ class BootStarp
 {
     public static function start()
     {
-        //self::setHeader();
+        self::setHeader();
         self::initDb();
     }
 
     public static function setHeader()
     {
+        if(!isset($_SERVER['HTTP_REFERER']))
+        {
+            return;
+        }
         $referer = $_SERVER['HTTP_REFERER'];
         $res = explode('.org', $referer);
         if (empty($res)) {
-            exit;
+            return;
         }
         $domain = $res[0] . ".org";
         if (strpos($domain, 'homingleopards.org')) {

@@ -87,11 +87,13 @@ class BaseModel
         $end = $start + $size;
         if($count < $end)
         {
-            return ['count' => $count, 'data' => [], 'success' => false, 'msg' => 'Request more than limit'];
+            //return ['count' => $count, 'data' => [], 'success' => false, 'msg' => 'Request more than limit'];
         }
         $condtion['LIMIT'] = [$start, $size];
         $condtion['ORDER'] = $order;
+
         $data = $this->dbConn->select($this->tableName, $fields, $condtion);
+
         return ['count' => $count, 'data' => $data, 'success' => true, 'msg' => 'success'];
     }
 

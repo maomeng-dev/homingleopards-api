@@ -81,7 +81,7 @@ class User extends BaseController
         {
             $this->jsonError($info['code'], $info['msg']);
         }
-        $this->jsonSuccess($info['data']);
+        $this->jsonSuccess(['info' => $info['data']]);
     }
 
     public function save()
@@ -107,7 +107,7 @@ class User extends BaseController
         $user_id = SessionHelper::get("user_id");
         if(empty($user_id))
         {
-            $this->jsonError(404, '未登录');
+            $this->jsonError(1001, '未登录');
         }
         if($level == 2)
         {

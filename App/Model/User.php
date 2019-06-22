@@ -51,7 +51,7 @@ class User extends BaseModel
         }
         else
         {
-            $result = $this->updateUser($data);
+            $result = $this->updateUser($data, $uid);
             if(empty($result))
             {
                 return $this->returnError(1002, '更新用户失败');

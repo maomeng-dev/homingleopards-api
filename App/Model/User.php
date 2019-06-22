@@ -27,6 +27,22 @@ class User extends BaseModel
     {
         if($uid == 0)
         {
+            //检查是否有同名的user_name和nickname
+            $count = $this->getCount(['user_name' => $data['user_name']]);
+            if($count > 0)
+            {
+                return $this->returnError(401, '已存在相同用户名');
+            }
+            //检查是否有同名的user_name和nickname
+            $count = $this->getCount(['nickname' => $data['nickname']]);
+            if($count > 0)
+            {
+                return $this->returnError(401, '已存在相同昵称');
+            }
+            if(empty($data['user_pass']) || empty($data['user_name']) || empty($data['nickname']))
+            {
+                return $this->returnError(401, '必要字段不足');
+            }
             $uid = $this->addUser($data);
             if($uid == 0)
             {
@@ -43,19 +59,25 @@ class User extends BaseModel
         }
         $this->id($uid);
         $this->mapUserInfo($this->data);
-        $this->returnSuccess($this->data);
-
+        return $this->returnSuccess($this->data);
     }
 
 
     protected function addUser($data)
     {
-
+        $data['create_by'] = SessionHelper::get('user_id');
+        $data['cre_time'] = date("Y-m-d H:i:s");
+        $data['user_pass'] = md5($data['user_pass']);
+        return $this->add($data);
     }
 
     protected function updateUser($data, $uid)
     {
-
+        if(!empty($data['user_pass']))
+        {
+            $data['user_pass'] = md5($data['user_pass']);
+        }
+        return $this->update($data, ['id' => $uid]);
     }
 
     /**
@@ -120,5 +142,6 @@ class User extends BaseModel
         $data['id'] = intval($data['id']);
         $data['cre_time'] = strtotime($data['cre_time']) * 1000;
         $data['last_login_time'] = strtotime($data['cre_time']) * 1000;
+        unset($data['user_pass']);
     }
 }

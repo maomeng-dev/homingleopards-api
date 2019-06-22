@@ -31,6 +31,9 @@ class BootStarp
         if (strpos($domain, 'homingleopards.org')) {
             header("Access-Control-Allow-Origin:{$domain}");
         }
+        header('Access-Control-Allow-Headers: content-type');
+        header('Access-Control-Allow-Methods:POST,GET,PUT,DELETE,PATCH,OPTIONS');
+        header('Access-Control-Allow-Credentials: true');
     }
 
     /**

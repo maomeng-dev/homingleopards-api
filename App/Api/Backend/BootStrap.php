@@ -7,6 +7,7 @@ class BootStrap
 {
     public static function init()
     {
+        self::initSession();
         SessionHelper::init('backend');
     }
 

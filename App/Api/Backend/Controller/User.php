@@ -74,7 +74,7 @@ class User extends BaseController
         {
             $this->current();
         }
-        $this->checkUser(1, $id);
+        $this->checkUser(2, $id);
         $user = new UserModel();
         $info = $user->getUser($id);
         if(empty($info['data']))
@@ -87,18 +87,23 @@ class User extends BaseController
     public function save()
     {
         $this->checkUser();
-        $data['nickname'] = \Flight::request()->data->nickname;
-        $data['user_name'] = \Flight::request()->data->user_name;
-        $data['password'] = \Flight::request()->data->password;
-        $data['comment'] = \Flight::request()->data->comment;
-        $uid = \Flight::request()->data->id;
+        $params = \Flight::request()->data->params;
+        $data['nickname'] = !empty($params['nickname']) ? $params['nickname'] : null;
+        $data['user_name'] = !empty($params['user_name']) ? $params['user_name'] : null;
+        $data['user_pass'] = !empty($params['user_pass']) ? $params['user_pass'] : null;
+        $data['comment'] = !empty($params['comment']) ? $params['comment'] : null;
+        $uid = $params['id'] ?? 0;
         $user = new UserModel();
-
+        $result = $user->saveUser($data, $uid);
+        if(empty($result['data']))
+        {
+            $this->jsonError($result['code'], $result['msg']);
+        }
+        $this->jsonSuccess($result['data']);
     }
 
     public function checkUser($level = 2, $uid = 0)
     {
-        return true;
         $user_id = SessionHelper::get("user_id");
         if(empty($user_id))
         {
@@ -141,13 +146,13 @@ class User extends BaseController
         if($type == 2)
         {
             //clear cookie;
-            setcookie($key, '', -1, 'homingleopards.org');
+            setcookie($key, '', -1, '/', '.homingleopards.org');
             return true;
         }
         $rand = rand(100000, 999999);
         //set cookie;
         $content = 'homingleopards' . "," . $data['id'] . "," . $rand . "," . md5(getConfig('common.salt'));
-        setcookie($key, $content, time() + 14400, 'homingleopards.org');
+        setcookie($key, $content, time() + 14400, '/', '.homingleopards.org');
     }
 
 }

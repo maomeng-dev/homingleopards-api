@@ -11,6 +11,10 @@ define("INC_FILE", DEV ? "maomeng_dev" : "maomeng");
 
 Flight::set('flight.views.path', VIEW_PATH);
 
+ini_set('session.use_cookies', 1);
+ini_set('session.cookie_path', '/');
+ini_set('session.cookie_domain', 'homingleopards.org');
+
 require __DIR__ . "/public/function.php";
 
 Flight::route(

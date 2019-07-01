@@ -64,17 +64,17 @@ class User extends BaseController
         {
             $this->jsonError($result['code'], $result['msg']);
         }
-        $this->jsonSuccess($result['data']);
+        $this->jsonSuccess(['info' => $result['data']]);
     }
 
     public function info()
     {
         $id = \Flight::request()->query->id;
+        $this->checkUser(2, $id);
         if(empty($id))
         {
             $this->current();
         }
-        $this->checkUser(2, $id);
         $user = new UserModel();
         $info = $user->getUser($id);
         if(empty($info['data']))

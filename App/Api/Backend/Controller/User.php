@@ -151,7 +151,7 @@ class User extends BaseController
         }
         $rand = rand(100000, 999999);
         //set cookie;
-        $content = 'homingleopards' . "," . $data['id'] . "," . $rand . "," . md5(getConfig('common.salt'));
+        $content = 'homingleopards' . "," . $data['id'] . "," . $rand . "," . md5(getConfig('common.salt') . "," . $rand . "," . $data['id']);
         setcookie($key, $content, time() + 14400, '/', '.homingleopards.org');
     }
 

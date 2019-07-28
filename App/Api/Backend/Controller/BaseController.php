@@ -4,6 +4,7 @@
 namespace App\Api\Backend\Controller;
 
 
+use App\Lib\Helper\SessionHelper;
 use Illuminate\Support\Facades\App;
 
 class BaseController
@@ -21,5 +22,29 @@ class BaseController
     public function jsonError($code, $msg, $data = [])
     {
         \Flight::json(['errno' => $code, 'errmsg' => $msg, 'data' => $data]);
+    }
+
+    public function checkUser($level = 2, $uid = 0)
+    {
+        $user_id = SessionHelper::get("user_id");
+        if(empty($user_id))
+        {
+            $this->jsonError(1001, '未登录');
+        }
+        if($level == 2)
+        {
+            if(SessionHelper::get("is_super_user") != 1)
+            {
+                $this->jsonError(404, '没有权限');
+            }
+        }
+        if($level == 1)
+        {
+            if($user_id != $uid)
+            {
+                $this->jsonError(404, '没有权限');
+            }
+        }
+        return true;
     }
 }

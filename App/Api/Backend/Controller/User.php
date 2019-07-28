@@ -102,29 +102,7 @@ class User extends BaseController
         $this->jsonSuccess($result['data']);
     }
 
-    public function checkUser($level = 2, $uid = 0)
-    {
-        $user_id = SessionHelper::get("user_id");
-        if(empty($user_id))
-        {
-            $this->jsonError(1001, '未登录');
-        }
-        if($level == 2)
-        {
-            if(SessionHelper::get("is_super_user") != 1)
-            {
-                $this->jsonError(404, '没有权限');
-            }
-        }
-        if($level == 1)
-        {
-            if($user_id != $uid)
-            {
-                $this->jsonError(404, '没有权限');
-            }
-        }
-        return true;
-    }
+
 
     /**
      * 退出登录

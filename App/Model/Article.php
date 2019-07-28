@@ -54,8 +54,8 @@ class Article extends BaseModel
                 return $this->returnError(1002, '更新文章失败');
             }
         }
-
-        return $this->returnSuccess($id);
+        $this->id($id);
+        return $this->returnSuccess($this->data);
     }
 
     /**

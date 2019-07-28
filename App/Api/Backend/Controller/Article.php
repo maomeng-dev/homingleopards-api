@@ -117,7 +117,7 @@ class Article  extends BaseController
             $this->jsonError($result['code'], $result['msg']);
         }
         $content = new ArticleContent();
-        $content->saveContent($result['data'], $data['content']);
-        $this->jsonSuccess([]);
+        $content->saveContent($result['data']['id'], $data['content']);
+        $this->jsonSuccess(['info' =>$result['data']]);
     }
 }

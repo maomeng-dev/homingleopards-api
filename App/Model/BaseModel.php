@@ -8,8 +8,6 @@
 
 namespace App\Model;
 
-use YokongService\Lib\AlertHelper;
-
 class BaseModel
 {
     protected $dbConn;

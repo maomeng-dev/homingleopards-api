@@ -110,7 +110,8 @@ class Article  extends BaseController
                 'author' => $data['author'],
                 'digest' => $data['digest'],
                 'media_id' => $media_id,
-                'thumb_url' => $data['thumb_url']
+                'thumb_url' => $data['thumb_url'],
+                'wechat_url' => $data['url'],
             ]);
         if(empty($result['data']))
         {

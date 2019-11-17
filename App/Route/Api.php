@@ -8,6 +8,7 @@
 
 namespace App\Route;
 
+use App\Api\Backend\Controller\Article;
 use App\Api\Front\Download;
 
 /**
@@ -24,6 +25,13 @@ final class Api
             $controller = new Download();
             if ($act == 'list') {
                 $controller->showlist();
+            }
+        });
+
+        \Flight::route('/front/article/@act', function ($act) {
+            $controller = new \App\Api\Front\Article();
+            if ($act == 'list') {
+                $controller->lists();
             }
         });
 

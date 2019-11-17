@@ -146,6 +146,11 @@ class BaseModel
         }
     }
 
+    public function delete($id)
+    {
+        $this->dbConn->delete($this->tableName, ['id' => $id]);
+    }
+
     public function returnSuccess($data, $msg = '操作成功')
     {
         return ['success' => true, 'code' => 200, 'msg' => $msg, 'data' => $data];

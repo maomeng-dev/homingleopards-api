@@ -5,6 +5,7 @@ namespace App\Api\Backend\Controller;
 
 use App\Model\Article as ArticleModel;
 use App\Model\ArticleContent;
+use App\Model\User as UserModel;
 
 /**
  * Class Article
@@ -120,5 +121,17 @@ class Article  extends BaseController
         $content = new ArticleContent();
         $content->saveContent($result['data']['id'], $data['content']);
         $this->jsonSuccess(['info' =>$result['data']]);
+    }
+
+    /**
+     * 删除文章
+     */
+    public function delete()
+    {
+        $this->checkUser();
+        $aid = $params['id'] ?? 0;
+        $article = new ArticleModel();
+        $result = $article->delete($aid);
+        $this->jsonSuccess($result['data']);
     }
 }

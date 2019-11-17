@@ -102,6 +102,21 @@ class User extends BaseController
         $this->jsonSuccess($result['data']);
     }
 
+    /**
+     * 删除用户
+     */
+    public function delete()
+    {
+        $this->checkUser();
+        $uid = $params['id'] ?? 0;
+        if(empty($uid))
+        {
+            $this->jsonError(2011, '参数错误');
+        }
+        $user = new UserModel();
+        $result = $user->delete($uid);
+        $this->jsonSuccess($result['data']);
+    }
 
 
     /**

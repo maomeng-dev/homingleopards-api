@@ -108,12 +108,27 @@ class User extends BaseController
     public function delete()
     {
         $this->checkUser();
+        $params = \Flight::request()->data;
         $uid = $params['id'] ?? 0;
         if(empty($uid))
         {
             $this->jsonError(2011, '参数错误');
         }
+        $user_id = SessionHelper::get("user_id");
+        if($user_id == $uid)
+        {
+            $this->jsonError(2012, '请不要自杀');
+        }
         $user = new UserModel();
+        $info = $user->getUser($uid);
+        if(empty($info['data']))
+        {
+            $this->jsonError($info['code'], $info['msg']);
+        }
+        if($info['data']['is_super_user'] == 1)
+        {
+            $this->jsonError(2014, '无权限删除管理员');
+        }
         $result = $user->delete($uid);
         $this->jsonSuccess($result['data']);
     }

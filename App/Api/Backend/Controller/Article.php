@@ -126,9 +126,10 @@ class Article  extends BaseController
     /**
      * 删除文章
      */
-    public function delete()
+    public function delete_local_article()
     {
         $this->checkUser();
+        $params = \Flight::request()->data;
         $aid = $params['id'] ?? 0;
         $article = new ArticleModel();
         $result = $article->delete($aid);

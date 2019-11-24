@@ -22,6 +22,7 @@ class BaseController
     public function jsonError($code, $msg, $data = [])
     {
         \Flight::json(['errno' => $code, 'errmsg' => $msg, 'data' => $data]);
+        exit;
     }
 
     public function checkUser($level = 2, $uid = 0)

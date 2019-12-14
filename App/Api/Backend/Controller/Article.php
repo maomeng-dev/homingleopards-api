@@ -128,7 +128,6 @@ class Article  extends BaseController
      */
     public function delete_local_article()
     {
-        $this->checkUser();
         $params = \Flight::request()->data;
         $aid = $params['id'] ?? 0;
         $article = new ArticleModel();

@@ -142,6 +142,7 @@ class User extends BaseModel
         $data['id'] = intval($data['id']);
         $data['cre_time'] = strtotime($data['cre_time']) * 1000;
         $data['last_login_time'] = strtotime($data['cre_time']) * 1000;
+        $data['is_super_user'] = !empty($data['is_super_user']);
         unset($data['user_pass']);
     }
 }
